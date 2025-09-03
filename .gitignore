@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+.env
+.env.*
+models/*.joblib
+# keep the models folder but ignore artifacts
+!models/.gitkeep

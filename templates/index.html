@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iris Classifier - Flask Demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; padding: 2rem; max-width: 900px; margin: auto;}
+    .card { border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+    h1 { margin-top: 0; }
+    label { display:block; font-weight:600; margin-top: 0.5rem;}
+    input { width: 100%; padding: 0.6rem 0.7rem; margin-top: 0.3rem; border: 1px solid #d1d5db; border-radius: 10px; }
+    button { margin-top: 1rem; padding: 0.7rem 1rem; border: 0; border-radius: 10px; cursor: pointer; }
+    .primary { background: #2563eb; color: white; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+    .result { background: #f3f4f6; border-radius: 10px; padding: 1rem; margin-top: 1rem; }
+    code { background: #f3f4f6; padding: 0.1rem 0.3rem; border-radius: 6px; }
+    .footer { margin-top:2rem; color:#6b7280; font-size: 0.9rem;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🌸 Iris Classifier (Flask)</h1>
+    <p>Enter features, submit, and the model will predict the iris species.</p>
+
+    <form method="POST" action="/predict">
+      <div class="grid">
+        <div>
+          <label for="sepal_length">Sepal length</label>
+          <input type="number" step="0.01" name="sepal_length" id="sepal_length" value="{{ sl or '' }}" required>
+        </div>
+        <div>
+          <label for="sepal_width">Sepal width</label>
+          <input type="number" step="0.01" name="sepal_width" id="sepal_width" value="{{ sw or '' }}" required>
+        </div>
+        <div>
+          <label for="petal_length">Petal length</label>
+          <input type="number" step="0.01" name="petal_length" id="petal_length" value="{{ pl or '' }}" required>
+        </div>
+        <div>
+          <label for="petal_width">Petal width</label>
+          <input type="number" step="0.01" name="petal_width" id="petal_width" value="{{ pw or '' }}" required>
+        </div>
+      </div>
+      <button class="primary" type="submit">Predict</button>
+    </form>
+
+    {% if error %}
+    <div class="result">
+      <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    {% if result %}
+    <div class="result">
+      <h3>Prediction</h3>
+      <p><strong>Class:</strong> {{ result.class_label }}</p>
+      <p><strong>Probabilities:</strong></p>
+      <ul>
+        {% for k,v in result.proba_by_class.items() %}
+          <li><code>{{k}}</code>: {{ '%.3f'|format(v) }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="footer">
+      <p><strong>How to run</strong>: in a terminal: <code>python train_model.py</code> once, then <code>python app.py</code> and open <code>http://127.0.0.1:5000</code>.</p>
+    </div>
+  </div>
+</body>
+</html>
